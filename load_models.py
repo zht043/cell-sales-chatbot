@@ -1,18 +1,16 @@
 import os
 import sys
-
-import gradio as gr
 import torch
 import transformers
 from peft import PeftModel
 from transformers import GenerationConfig, LlamaForCausalLM, LlamaTokenizer
-
 
 import traceback
 from queue import Queue
 from threading import Thread
 
 
+### BEGIN of alpaca model
 
 class Stream(transformers.StoppingCriteria):
     def __init__(self, callback_func=None):
@@ -152,7 +150,7 @@ if torch.__version__ >= "2" and sys.platform != "win32":
 
 
 
-def evaluate(   # alpaca evaluate function
+def alpaca_evaluate(   # alpaca evaluate function
     prompt,
     temperature=0.1,
     top_p=0.75,
@@ -207,11 +205,16 @@ def evaluate(   # alpaca evaluate function
 
                 if output[-1] in [tokenizer.eos_token_id]:
                     break
-                if decoded_output.endswith("\n### "):   # early stop
-                    yield decoded_output[:-4]
-                    return
+
+                current_response = decoded_output.split("### Response:" )[1].strip()
+                
+                if current_response.endswith("\n###"): # early stop
+                    yield current_response.split("###")[0].strip(), decoded_output
+                    return 
                 else:
-                    yield decoded_output
+                    yield current_response, decoded_output
+                    
+
         return  # early return for stream_output
 
     # Without streaming
@@ -227,99 +230,10 @@ def evaluate(   # alpaca evaluate function
     output = tokenizer.decode(s)
     yield decoded_output.split("### Response:" )[1].strip()
 
-# def evaluate(*args, **kwargs):
-#     rs = "### Instruction\n\ntest\n\n### Response:\n"
-#     for i in "Hello!!!"+str(time.time())+"\n### Bad\n":
-#         rs+=i
-#         yield rs
+### END of alpaca model
 
-import gradio as gr
-import random
-import time
+### BEGIN of bert Closed Domain QA
 
-with gr.Blocks() as demo:
-    gr.Markdown("## Online Chatbot")
-    chatbot = gr.Chatbot()
-    msg = gr.Textbox()
-    
-    def add_file(history, file):
-        history = history + [((file.name,), None)]
-        return history
+from bert.inference import main as bert_qa_api
 
-    def user(user_message, history):
-        return "", history + [[user_message, None]]
-    
-    def getInstruction(history):
-        prompt = "### Instruction:\nYou are an AI assistant that happy to solve any question.\
-Below is an instruction paired with an input that provides further context. \
-Write a response that appropriately completes the request."
-        # here add database log
-
-        if len(history)>1:
-            prompt+="\nThe history chat is:\n"
-            for i in history[:-1]:
-                prompt+="\nInput:\n"+i[0]+"\nResponse:\n"+i[1]+"\n" if type(i[0]) == str else "\nInput:\n"+i[1]+"\n"
-
-        prompt+="\n\n### Input:\n"+history[-1][0]+"\n\n### Response:\n" 
-        print(prompt)
-        return prompt
-
-    def callchat(history,temperature, top_p, top_k, num_beams, max_new_tokens):
-        history[-1][1] = ""
-        for i in evaluate(getInstruction(history),temperature, top_p, top_k, num_beams, max_new_tokens):
-
-            current_response = i.split("### Response:" )[1].strip()
-
-            history[-1][1] = current_response
-            yield history, i
-
-    def bot(history):
-        bot_message = random.choice(["User uploaded a picture.", "I am still learning to recognize pictures.", "I'm still learning."])
-        history[-1][1] = ""
-        for character in bot_message:
-            history[-1][1] += character
-            yield history
-        
-    with gr.Row():
-        with gr.Column(scale=0.85):
-            submit_btn = gr.Button(value="Submit",variant="primary")
-        with gr.Column(scale=0.15, min_width=0):
-            upload_btn = gr.UploadButton("📁", file_types=["image", "video", "audio"])
-        with gr.Column(scale=0.15, min_width=0):
-            clear = gr.Button("Clear")
-    
-    with gr.Accordion("Open for More!", open=False):
-        with gr.Row():
-            temperature = gr.Slider(
-                minimum=0, maximum=1, value=0.1, label="Temperature"
-            )
-            top_p = gr.Slider(
-                minimum=0, maximum=1, value=0.75, label="Top p"
-            )
-            top_k = gr.Slider(
-                minimum=0, maximum=100, step=1, value=40, label="Top k"
-            )
-            num_beams = gr.Slider(
-                minimum=1, maximum=4, step=1, value=1, label="Beams"
-            )
-            max_new_tokens = gr.Slider(
-                minimum=1, maximum=2000, step=1, value=256, label="Max tokens"
-            )
-        with gr.Row():
-            developer_box = gr.TextArea(label="Original Output")
-
-    msg.submit(user, [msg, chatbot], [msg, chatbot], queue=False).then(
-        callchat, [chatbot, temperature, top_p, top_k, num_beams, max_new_tokens], [chatbot,developer_box]
-    )
-    submit_btn.click(user, [msg, chatbot], [msg, chatbot], queue=False).then(
-        callchat, [chatbot, temperature, top_p, top_k, num_beams, max_new_tokens], [chatbot,developer_box]
-    )
-    upload_btn.upload(add_file, [chatbot, upload_btn], [chatbot]).then(
-        bot, chatbot, chatbot
-    )
-    clear.click(lambda: None, None, chatbot, queue=False)
-    
-demo.queue(concurrency_count=3)
-if __name__ == "__main__":
-    demo.launch(server_name = server_name, server_port = server_port, share_gradio = share_gradio)
 
