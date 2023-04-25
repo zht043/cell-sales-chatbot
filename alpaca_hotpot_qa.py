@@ -147,7 +147,7 @@ class AlpacaHotPotQA:
             
             # invoke Alpaca to summarize
             instruction = '''Summarize the input passage which contains info about\
-        different specific models of a cellphone family
+        different specific models of a cellphone family, don't omit model names
         '''
             input_text = sum_rele_text
             with torch.autocast("cuda"):
@@ -194,7 +194,7 @@ class AlpacaHotPotQA:
 
     def alpaca_inference(self, input_text, instructions, 
         temperature = 0.3, top_p = 0.75, top_k = 40, num_beams = 1, 
-        max_new_tokens = 256, **kwargs):
+        max_new_tokens = 666, **kwargs):
 
         input_prompt = self.prompter.generate_prompt(instructions, input_text)
         generation_config = GenerationConfig(temperature=temperature, top_p=top_p,
