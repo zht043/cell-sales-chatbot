@@ -239,3 +239,17 @@ def alpaca_evaluate(   # alpaca evaluate function
     yield decoded_output.split("### Response:" )[1].strip()
 
 ### END of alpaca model
+
+### BEGIN of alpaca_hotpot_qa
+
+import pickle
+#load phonedb data
+with open("phone_dataset.pkl", "rb") as f:
+    pdb = pickle.load(f)
+phonedb_data, name_map = pdb
+
+from alpaca_hotpot_qa import AlpacaHotPotQA
+
+alphot_qa_inference = AlpacaHotPotQA(device, model, tokenizer, phonedb_data, name_map)
+
+### END of alpaca_hotpot_qa
