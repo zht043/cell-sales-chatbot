@@ -100,13 +100,16 @@ class AlpacaHotPotQA:
 
 
 
-    def inference(self, question, print_process=True):
+    def inference(self, question, print_process=True, yield_process = False):
         key_names = self.name_query_mix_models_inference(question, self.name_list, print_process)
 
         if print_process:
             print("\n------------------------------------------------")
-            print("Step 3: Query local database storing scraped text from phonedb.net")
+            print()
             print("Querying local DataBase ......")
+        if yield_process:
+            yield "Step 3: Query local database storing scraped text from phonedb.net", False
+            yield "Querying local DataBase ......", False
 
         context_text = ""
         for n in key_names:
@@ -115,6 +118,8 @@ class AlpacaHotPotQA:
 
             if print_process:
                 print("Model Name Family: ", n)
+            if yield_process:
+                yield "Model Name Family: "+str(n), False
 
             # too many texts, crashed the alpaca model, added a simple filter
             topk = 3
@@ -140,7 +145,10 @@ class AlpacaHotPotQA:
             sum_rele_text = ' '.join(relevant_texts)
             #print(sum_rele_text)
 
-            
+
+        if yield_process:
+                yield "Step 4: Summarizing the text fetched using Alpaca base model", False
+
         if print_process:
             print("\n------------------------------------------------")
             print("Step 4: Summarizing the text fetched using Alpaca base model")
@@ -156,6 +164,7 @@ class AlpacaHotPotQA:
             output = output.split('###')[0].strip()
             output = output.strip()
             context_text += output + "\n\n" 
+        
 
         if print_process:
             print("................................................")
@@ -163,6 +172,9 @@ class AlpacaHotPotQA:
             print(context_text)
 
             print("------------------------------------------------")
+        
+        if yield_process:
+            yield "The summarized context information to be pipe into Alpaca model's prompt:\n"+str(context_text), False
 
         # Final inference to answer the question
         instruction = "Answer the input question.\n\n\
@@ -184,7 +196,14 @@ class AlpacaHotPotQA:
             print("------------------------------------------------")
             print("\n\nAnswer:\n", output)
             print("------------------------------------------------")
-        return output
+        if yield_process:
+            yield "Step 5: Updating Alpaca's prompt with context info extracted from local database:\n"+str(output), False
+        
+        if yield_process:
+            yield output, True
+            return output, True
+        else:
+            return output
 
 
 

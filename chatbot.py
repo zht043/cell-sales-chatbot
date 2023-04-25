@@ -29,14 +29,33 @@ with gr.Blocks(title="Chatbot") as demo:
     def user(user_message, history):
         return "", history + [[user_message, "Waiting for prompt to be generated..."]]
     
-    def getInstruction(history):
+
+
+    def callchat(history, log, temperature, top_p, top_k, num_beams, max_new_tokens):
+        log = time.strftime("%d %b %Y %H:%M:%S: ", time.gmtime(time.time())) + "start generating prompt: bert\n"; yield {log_box: log}
+        history[-1][1] = ""
         prompt = "Below is an instruction that describes a task, paired with an input that provides further context. Write a response that appropriately completes the request.\n\n### Instruction:\nAs an AI model, you are reqired to generate response according to the chat history."
+        
+        # generate prompt
+
         # here add database log
 
         bert_qa_result = bert_qa_api(history[-1][0],from_api = True)
         if bert_qa_result:
             prompt+="\nHere are some hints: "+bert_qa_result
+            log += str(bert_qa_result)+"\n"; yield {log_box: log}
 
+        log += time.strftime("%d %b %Y %H:%M:%S: ", time.gmtime(time.time())) + "start generating prompt: alphot\n"; yield {log_box: log}
+
+
+        for new_log, status_code in alphot_qa_inference.inference(history[-1][0],yield_process=True):
+            if not status_code:
+                log += str(new_log)+"\n"
+                yield {log_box: log}
+            else:
+                alphot_qa_result = new_log
+        if alphot_qa_result:
+            prompt+="\nHere are some hints: "+alphot_qa_result
 
 
         if len(history)>1:
@@ -46,13 +65,10 @@ with gr.Blocks(title="Chatbot") as demo:
 
         prompt+="\n\n### Input:\n"+history[-1][0]+"\n\n### Response:\n" 
         print(prompt)
-        return prompt
 
-    def callchat(history, log, temperature, top_p, top_k, num_beams, max_new_tokens):
-        log = time.strftime("%d %b %Y %H:%M:%S: ", time.gmtime(time.time())) + "start generating prompt\n"; yield {log_box: log}
-        history[-1][1] = ""
 
-        prompt = getInstruction(history)
+        # end of prompt generation
+
         log += time.strftime("%d %b %Y %H:%M:%S: ", time.gmtime(time.time())) + "start streaming\n"; yield {log_box: log}
         for current_response, decodeded_output in alpaca_evaluate(prompt,temperature, top_p, top_k, num_beams, max_new_tokens):
 
