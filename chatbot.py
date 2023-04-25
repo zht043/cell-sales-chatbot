@@ -12,6 +12,11 @@ import time
 
 import random
 
+# Allows to listen on all interfaces by providing '0.
+server_name = "0.0.0.0"
+share_gradio = False
+server_port= None
+
 with gr.Blocks(title="Chatbot") as demo:
     gr.Markdown("## Online Chatbot")
     chatbot = gr.Chatbot()
@@ -22,14 +27,15 @@ with gr.Blocks(title="Chatbot") as demo:
         return history
 
     def user(user_message, history):
-        return "", history + [[user_message, None]]
+        return "", history + [[user_message, "Waiting for prompt to be generated..."]]
     
     def getInstruction(history):
         prompt = "Below is an instruction that describes a task, paired with an input that provides further context. Write a response that appropriately completes the request.\n\n### Instruction:\nAs an AI model, you are reqired to generate response according to the chat history."
         # here add database log
 
-        bert_qa_result = bert_qa_api("which kind of phones are suitable for gaming", "Some of the best phones for gaming include the Asus ROG Phone 5, Nubia Red Magic 6, iPhone 12 Pro Max, Samsung Galaxy S21 Ultra, and OnePlus 9 Pro. Some of the best foldable phones available include the Samsung Galaxy Z Fold 2, Samsung Galaxy Z Flip, Huawei Mate X2, Xiaomi Mi Mix Fold, and Royole FlexPai 2. Some of the phones with the longest battery life include the Asus ZenFone 7, Samsung Galaxy M51, Moto G Power (2021), Xiaomi Poco X3 NFC, and Samsung Galaxy A72. Some of the best phones for people with hearing impairments include the iPhone 12 Pro Max, Samsung Galaxy S21 Ultra, Google Pixel 5, OnePlus 9 Pro, and Sony Xperia 1 II.")
-        prompt+="Here is some hints: "+bert_qa_result
+        bert_qa_result = bert_qa_api(history[-1][0],from_api = True)
+        if bert_qa_result:
+            prompt+="\nHere are some hints: "+bert_qa_result
 
 
 
@@ -70,7 +76,7 @@ with gr.Blocks(title="Chatbot") as demo:
         with gr.Column(scale=0.15, min_width=0):
             clear = gr.Button("Clear")
     
-    with gr.Accordion("Open for More!", open=False):
+    with gr.Accordion("Open for More!", open=True):
         with gr.Row():
             temperature = gr.Slider(
                 minimum=0, maximum=1, value=0.1, label="Temperature"
@@ -103,5 +109,6 @@ with gr.Blocks(title="Chatbot") as demo:
     clear.click(lambda: None, None, chatbot, queue=False)
     
 demo.queue(concurrency_count=3)
-if __name__ == "__main__":
-    demo.launch(server_name = server_name, server_port = server_port, share_gradio = share_gradio)
+
+demo.launch(server_name = server_name, server_port = server_port)
+
