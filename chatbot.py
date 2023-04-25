@@ -12,7 +12,7 @@ import time
 
 import random
 
-with gr.Blocks() as demo:
+with gr.Blocks(title="Chatbot") as demo:
     gr.Markdown("## Online Chatbot")
     chatbot = gr.Chatbot()
     msg = gr.Textbox()
@@ -28,6 +28,11 @@ with gr.Blocks() as demo:
         prompt = "Below is an instruction that describes a task, paired with an input that provides further context. Write a response that appropriately completes the request.\n\n### Instruction:\nAs an AI model, you are reqired to generate response according to the chat history."
         # here add database log
 
+        bert_qa_result = bert_qa_api("which kind of phones are suitable for gaming", "Some of the best phones for gaming include the Asus ROG Phone 5, Nubia Red Magic 6, iPhone 12 Pro Max, Samsung Galaxy S21 Ultra, and OnePlus 9 Pro. Some of the best foldable phones available include the Samsung Galaxy Z Fold 2, Samsung Galaxy Z Flip, Huawei Mate X2, Xiaomi Mi Mix Fold, and Royole FlexPai 2. Some of the phones with the longest battery life include the Asus ZenFone 7, Samsung Galaxy M51, Moto G Power (2021), Xiaomi Poco X3 NFC, and Samsung Galaxy A72. Some of the best phones for people with hearing impairments include the iPhone 12 Pro Max, Samsung Galaxy S21 Ultra, Google Pixel 5, OnePlus 9 Pro, and Sony Xperia 1 II.")
+        prompt+="Here is some hints: "+bert_qa_result
+
+
+
         if len(history)>1:
             prompt+="\nThe history chat is:\n"
             for i in history[:-1]:
@@ -37,18 +42,18 @@ with gr.Blocks() as demo:
         print(prompt)
         return prompt
 
-    def callchat(history, log_box, temperature, top_p, top_k, num_beams, max_new_tokens):
-        log_box += time.strftime("d% %b %Y %H:%M:%S: ", time.gmtime(time.time())) + "start streaming"
-        yield {log_box: log_box}
+    def callchat(history, log, temperature, top_p, top_k, num_beams, max_new_tokens):
+        log = time.strftime("%d %b %Y %H:%M:%S: ", time.gmtime(time.time())) + "start generating prompt\n"; yield {log_box: log}
         history[-1][1] = ""
 
         prompt = getInstruction(history)
+        log += time.strftime("%d %b %Y %H:%M:%S: ", time.gmtime(time.time())) + "start streaming\n"; yield {log_box: log}
         for current_response, decodeded_output in alpaca_evaluate(prompt,temperature, top_p, top_k, num_beams, max_new_tokens):
 
             history[-1][1] = current_response
-            yield {history:history, decodeded_output:decodeded_output}
-        log_box += time.strftime("d% %b %Y %H:%M:%S: ", time.gmtime(time.time())) + "end of streaming"
-        yield {log_box: log_box}
+            yield {chatbot:history, developer_box:decodeded_output}
+        log += time.strftime("%d %b %Y %H:%M:%S: ", time.gmtime(time.time())) + "finished\n"
+        yield {log_box: log}
 
     def bot(history):
         bot_message = random.choice(["User uploaded a picture.", "I am still learning to recognize pictures.", "I'm still learning."])

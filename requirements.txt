@@ -15,3 +15,6 @@ datasets
 sentence_transformers
 fuzzywuzzy
 python-Levenshtein
+pytorch_transformers
+tensorboardX
+scikit-learn

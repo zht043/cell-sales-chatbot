@@ -231,3 +231,9 @@ def alpaca_evaluate(   # alpaca evaluate function
     yield decoded_output.split("### Response:" )[1].strip()
 
 ### END of alpaca model
+
+### BEGIN of bert Closed Domain QA
+
+from bert.inference import main as bert_qa_api
+
+
