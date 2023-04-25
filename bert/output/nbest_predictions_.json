@@ -1,0 +1,130 @@
+{
+    "0X0N1": [
+        {
+            "text": "Asus ROG Phone 5, Nubia Red Magic 6, iPhone 12 Pro Max, Samsung Galaxy S21 Ultra, and OnePlus 9 Pro",
+            "probability": 0.6763516718787277,
+            "start_logit": 2.8578946590423584,
+            "end_logit": 4.684284687042236
+        },
+        {
+            "text": "OnePlus 9 Pro",
+            "probability": 0.0870215293708259,
+            "start_logit": 0.8073370456695557,
+            "end_logit": 4.684284687042236
+        },
+        {
+            "text": "Nubia Red Magic 6, iPhone 12 Pro Max, Samsung Galaxy S21 Ultra, and OnePlus 9 Pro",
+            "probability": 0.03814953930367475,
+            "start_logit": -0.01730482466518879,
+            "end_logit": 4.684284687042236
+        },
+        {
+            "text": "Asus ROG Phone 5",
+            "probability": 0.036865137819551294,
+            "start_logit": 2.8578946590423584,
+            "end_logit": 1.774837851524353
+        },
+        {
+            "text": "the Asus ROG Phone 5",
+            "probability": 0.034168902465629265,
+            "start_logit": 2.7819442749023438,
+            "end_logit": 1.774837851524353
+        },
+        {
+            "text": "Asus ROG Phone 5, Nubia Red Magic 6, iPhone 12 Pro Max, Samsung Galaxy S21 Ultra",
+            "probability": 0.013501216184213918,
+            "start_logit": 2.8578946590423584,
+            "end_logit": 0.7703512907028198
+        },
+        {
+            "text": "the Asus ROG Phone 5, Nubia Red Magic 6, iPhone 12 Pro Max, Samsung Galaxy S21 Ultra",
+            "probability": 0.012513766833691866,
+            "start_logit": 2.7819442749023438,
+            "end_logit": 0.7703512907028198
+        },
+        {
+            "text": "Samsung Galaxy S21 Ultra, and OnePlus 9 Pro",
+            "probability": 0.012404529162092675,
+            "start_logit": -1.1407568454742432,
+            "end_logit": 4.684284687042236
+        },
+        {
+            "text": "Asus ROG Phone 5, Nubia Red Magic 6",
+            "probability": 0.010565382873326822,
+            "start_logit": 2.8578946590423584,
+            "end_logit": 0.5251544117927551
+        },
+        {
+            "text": "Asus ROG Phone 5, Nubia Red Magic 6, iPhone 12 Pro Max",
+            "probability": 0.010083300347254945,
+            "start_logit": 2.8578946590423584,
+            "end_logit": 0.4784521460533142
+        },
+        {
+            "text": "the Asus ROG Phone 5, Nubia Red Magic 6",
+            "probability": 0.009792653934397473,
+            "start_logit": 2.7819442749023438,
+            "end_logit": 0.5251544117927551
+        },
+        {
+            "text": "the Asus ROG Phone 5, Nubia Red Magic 6, iPhone 12 Pro Max",
+            "probability": 0.009345829867324592,
+            "start_logit": 2.7819442749023438,
+            "end_logit": 0.4784521460533142
+        },
+        {
+            "text": "iPhone 12 Pro Max, Samsung Galaxy S21 Ultra, Google Pixel 5, OnePlus 9 Pro, and Sony Xperia 1 II",
+            "probability": 0.006673591401873235,
+            "start_logit": 0.8516345620155334,
+            "end_logit": 2.0719897747039795
+        },
+        {
+            "text": "Samsung Galaxy Z Fold 2, Samsung Galaxy Z Flip, Huawei Mate X2, Xiaomi Mi Mix Fold, and Royole FlexPai 2",
+            "probability": 0.006650162584892642,
+            "start_logit": 1.4632470607757568,
+            "end_logit": 1.4568604230880737
+        },
+        {
+            "text": "foldable",
+            "probability": 0.006602194413721701,
+            "start_logit": 1.103675365447998,
+            "end_logit": 1.8091928958892822
+        },
+        {
+            "text": "best phones for gaming include the Asus ROG Phone 5",
+            "probability": 0.006128687860445864,
+            "start_logit": 1.063609004020691,
+            "end_logit": 1.774837851524353
+        },
+        {
+            "text": "Some of the best phones for gaming include the Asus ROG Phone 5",
+            "probability": 0.005702168480977207,
+            "start_logit": 0.9914748668670654,
+            "end_logit": 1.774837851524353
+        },
+        {
+            "text": "OnePlus 9 Pro.",
+            "probability": 0.005623952514171434,
+            "start_logit": 0.8073370456695557,
+            "end_logit": 1.9451638460159302
+        },
+        {
+            "text": "foldable phones",
+            "probability": 0.004993877851349996,
+            "start_logit": 1.103675365447998,
+            "end_logit": 1.530003547668457
+        },
+        {
+            "text": "OnePlus 9 Pro. Some of the best foldable",
+            "probability": 0.004908968120291823,
+            "start_logit": 0.8073370456695557,
+            "end_logit": 1.8091928958892822
+        },
+        {
+            "text": "",
+            "probability": 0.0019529367315651398,
+            "start_logit": 0.7405346035957336,
+            "end_logit": 0.954265832901001
+        }
+    ]
+}
