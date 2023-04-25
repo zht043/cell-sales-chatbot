@@ -10,6 +10,14 @@ from queue import Queue
 from threading import Thread
 
 
+### BEGIN of bert Closed Domain QA
+
+sys.path.append("bert")
+from bert.inference import main as bert_qa_api
+
+### END of bert bert Closed Domain QA
+
+
 ### BEGIN of alpaca model
 
 class Stream(transformers.StoppingCriteria):
@@ -231,9 +239,3 @@ def alpaca_evaluate(   # alpaca evaluate function
     yield decoded_output.split("### Response:" )[1].strip()
 
 ### END of alpaca model
-
-### BEGIN of bert Closed Domain QA
-
-from bert.inference import main as bert_qa_api
-
-

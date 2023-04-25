@@ -1,3 +1,4 @@
+import os
 import json
 import pandas as pd
 import numpy as np
@@ -5,7 +6,11 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 def get_document():
-    with open("dataset/train.json", 'r') as f:
+    if os.path.exists("dataset/train.json"):
+        json_file_path = "dataset/train.json"
+    else:
+        json_file_path = "bert/dataset/train.json"
+    with open(json_file_path, 'r') as f:
         data = json.load(f)
     documment = []
     paragraphs = data['data'][0]['paragraphs']

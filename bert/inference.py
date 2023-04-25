@@ -164,7 +164,7 @@ def load_and_cache_examples(args, tokenizer, evaluate=False, output_examples=Fal
     return dataset
 
 
-def main(question=''):
+def main(question='', from_api = False):
     parser = argparse.ArgumentParser()
 
     ## Required parameters
@@ -270,6 +270,12 @@ def main(question=''):
 
     if question:
         args.question = question
+    if from_api:
+        args.train_file = "bert/dataset/train.json"
+        args.predict_file = "bert/dataset/test.json"
+        args.model_name_or_path = "bert/output/"
+        args.output_dir = "bert/output/"
+
     args.context = match_document(args.question)
 
     # logger.warning("Context:")
@@ -342,20 +348,30 @@ def main(question=''):
 
 def test_dataset(question, context) :
 
-    with open("dataset/test.json", 'r') as f:
+    if os.path.exists("dataset/train.json"):
+        train_file_path = "dataset/train.json"
+        test_file_path = "dataset/test.json"
+    else:
+        train_file_path = "bert/dataset/train.json"
+        test_file_path = "bert/dataset/test.json"
+    with open(train_file_path, 'r') as f:
         data = json.load(f)
 
     data['data'][0]['paragraphs'][0]['context'] = context
     data['data'][0]['paragraphs'][0]['qas'][0]['question'] = question
 
 
-    with open("dataset/test.json", 'w') as f:
+    with open(test_file_path, 'w') as f:
         json.dump(data,f, indent=4)
         
 
 def result_extract():
 
-    with open("./output/predictions_.json", 'r') as f:
+    if os.path.exists("./output/predictions_.json"):
+        predictions_file_path = "./output/predictions_.json"
+    else:
+        predictions_file_path = "bert/output/predictions_.json"
+    with open(predictions_file_path, 'r') as f:
         data = json.load(f)
         result = data['0X0N1']
     return result
