@@ -1,8 +1,91 @@
-# Run in Closed Domain QA Mode
+# Closed Domain And Open Domain Q&A with BERT
+[![logo](https://img.shields.io/badge/HUANGYming-projects-orange?style=flat&logo=github)](https://github.com/HUANGYming) 
 
- In this mode, Context will be automatically searched from document database by Retriever based on TF-IDF. So, user only need to input Question.
+![](https://img.shields.io/badge/Linux%20build-pass-green.svg?logo=linux) 
+![](https://img.shields.io/badge/NVIDIA-CUDA-green.svg?logo=nvidia) 
 
-## Preview in shell
+## Table of Contents
+
+- [Structure](#Structure)
+- [Installation](#installation)
+- [Closed Domain Q&A Mode](#closed-domain)
+- [Open Domain Q&A Mode](#open-domain)
+- [Dataset](#dataset)
+- [License](#license)
+
+## I. Structure <a id="Structure"></a>
+
+```
+unet-multiclass-pytorch/
+    - dataset/
+    - output/
+    - README.md
+    - bert_cdqa_api.py
+    - bert_cdqa_api_without_retrieval.py
+    - inference.py
+    - inference.sh
+    - inference_without_retrieval.py
+    - inference_without_retrieval.sh
+    - match_document.py
+    - modeling_bert.py
+    - utils_squad.py
+    - utils_squad_evaluate.py
+    - requirements.txt
+```
+
+in which:
+
+- `dataset/` store the dataset
+
+- `output/` contains the model and inference result
+
+- `README.md` contains the guidance
+
+- `bert_cdqa_api.py` contains the entrance of API of closed-domain Q&A
+
+- `bert_cdqa_api_without_retrieval.py` contains the entrance of API of open-domain Q&A
+
+- `inference_without_retrieval.py` contains the inference function
+
+- `inference_without_retrieval.sh` contains the inference entrance through shell
+
+- `match_document.py` make retrieval by TF-IDF
+
+- `modeling_bert.py` contains the basic structure of BERT 
+
+- `utils_squad.py` contains the necessary functions of BERT
+
+- `utils_squad_evaluate.py` contains the necessary functions of BERT
+
+- `requirements.txt` contains the necessary packages
+
+  
+
+## II. Installation <a id="installation"></a>
+
+```
+matplotlib==3.2.2
+numpy==1.19.2
+Pillow==8.2.0
+pytorch-gpu==1.10.2
+torchvision==0.4.2
+tensorboard==2.6.0
+future==0.18.2
+tqdm==4.59.0
+scikit-image==0.17.2
+torchio==0.18.76
+```
+
+To install for Ubuntu,
+```
+$ conda install -r requirements.txt
+```
+
+## III. Closed Domain QA Mode <a id="closed-domain"></a>
+
+In this mode, Context will be automatically searched from document database by Retriever based on TF-IDF. So, user only need to input Question.
+
+### 1. Preview in shell
 
 ```shell
 sh inference.sh Question 
@@ -26,9 +109,7 @@ Output:
 Asus ROG Phone 5, Nubia Red Magic 6, iPhone 12 Pro Max, Samsung Galaxy S21 Ultra, and OnePlus 9 Pro
 ```
 
-
-
-## API in Python
+### 2. API in Python
 
 ```python
 from inference import main
@@ -41,14 +122,11 @@ Output:
 ```
 Asus ROG Phone 5, Nubia Red Magic 6, iPhone 12 Pro Max, Samsung Galaxy S21 Ultra, and OnePlus 9 Pro
 ```
+## IV. Open Domain QA Mode <a id="open-domain"></a>
 
+In this mode, Context that including the answer of Question need to be given manually. So, user  need to input Question and Context.
 
-
-# Run in Open Domain QA Mode 
-
- In this mode, Context that including the answer of Question need to be given manually. So, user  need to input Question and Context.
-
-## By Shell
+### By Shell
 
 To run by shell:
 
@@ -75,9 +153,7 @@ Output:
 Asus ROG Phone 5, Nubia Red Magic 6, iPhone 12 Pro Max, Samsung Galaxy S21 Ultra, and OnePlus 9 Pro
 ```
 
-
-
-## API in Python
+### API in Python
 
 ````python
 from inference_without_retrieval import main
@@ -92,7 +168,7 @@ Output:
 Asus ROG Phone 5, Nubia Red Magic 6, iPhone 12 Pro Max, Samsung Galaxy S21 Ultra, and OnePlus 9 Pro
 ```
 
-# Dataset
+## Dataset <a id="dataset"></a>
 
 Based on phone1.json from Ning Zichun
 
@@ -126,4 +202,7 @@ In preprocessing, the format converted to the same as SQuAD 2.0. Also, the quest
 }
 ```
 
+## License <a id="License "></a>
+
+MIT © HYM
 
