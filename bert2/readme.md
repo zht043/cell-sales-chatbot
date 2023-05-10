@@ -1,8 +1,8 @@
 dataset
 ======
-dataset consists of three parts: instructions, inputs, outputs;
-use outputs as answer text
-more details can refer to phone1.json
+dataset consists of three parts: instructions, inputs, outputs;   
+use outputs as answer text   
+more details can refer to phone1.json   
 
 usage
 =====
