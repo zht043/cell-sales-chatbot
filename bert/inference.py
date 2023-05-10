@@ -266,7 +266,11 @@ def main(question='', from_api = False):
     #                          "See details at https://nvidia.github.io/apex/amp.html")
     parser.add_argument('--server_ip', type=str, default='', help="Can be used for distant debugging.")
     parser.add_argument('--server_port', type=str, default='', help="Can be used for distant debugging.")
-    args = parser.parse_args()
+    
+    if from_api:
+        args = parser.parse_args([])
+    else:
+        args = parser.parse_args()
 
     if question:
         args.question = question
