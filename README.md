@@ -7,9 +7,11 @@ Domain-specific AI chatbot built with a combinations of Alpaca-lora and other cl
 
 Stanford Alpaca LLM(Large Language Model):https://crfm.stanford.edu/2023/03/13/alpaca.html
 
-Implementation reference: https://github.com/tloen/alpaca-lora
+Alpaca-Lora model reference: https://github.com/tloen/alpaca-lora
 
+Check [our presentation slides](./ARIN7102 presentation.pptx.pdf) for more details
 
+Source Files:
 
 * `chatbot.py` runs our finalized model with web UI 
 * `alpaca_hotpot_qa.py` contain class definition of an alpaca & classical model fusion pipeline
