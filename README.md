@@ -5,19 +5,27 @@ Stanford Alpaca LLM(Large Language Model):https://crfm.stanford.edu/2023/03/13/a
 
 Implementation reference: https://github.com/tloen/alpaca-lora
 
+## File Structure
+
+```
+```
+
+* `chatbot.py` runs our finalized model with web UI 
+* ``
 
 
-Install Dependencies:
+
+
+
+## Install Dependencies
 
 ```
 pip install -r requirements.txt
 ```
 
+## Chatbot Web UI 
 
-
-## Chatbot Web Interface
-
-We utilize Gradio to construct a web interface. Simply execute:
+We utilize Gradio to construct a web user interface. Simply execute:
 
 ```shell
 python chatbot.py
@@ -30,13 +38,13 @@ Optional parameters:
 - `--server_port <int>`: Define the server port for Gradio. If not provided, Gradio will choose an available port starting from 7860.
 - `--share`: Enable Gradio's sharing service (default: False).
 
-![Web Interface](./img/web1.png)
+![Web Interface](README.assets/web1.png)
 
 ## Alpaca-Hotpot Pipeline
 
 Combining Alpaca-Lora LLM with other classical NLP models for QA task: Alpaca-Hotpot(Alpaca-Fusion)
 
-<img src="img/image-20230510202623722.png" alt="image-20230510202623722" style="zoom:50%;" /> 
+<img src="README.assets/image-20230510202623722.png" alt="image-20230510202623722" style="zoom:50%;" /> 
 
 ### Walk-through of Alpaca-Hotpot pipelines
 
