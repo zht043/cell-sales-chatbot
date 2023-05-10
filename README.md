@@ -1,19 +1,25 @@
 # Alpaca LLM based Cellphone Sales Chatbot
+![](https://img.shields.io/badge/Linux%20build-pass-green.svg?logo=linux) 
+
+![](https://img.shields.io/badge/NVIDIA-CUDA-green.svg?logo=nvidia) 
+
 Domain-specific AI chatbot built with a combinations of Alpaca-lora and other classical NLP models such as BERT for cellphone sales relevant Q&amp;A.
 
 Stanford Alpaca LLM(Large Language Model):https://crfm.stanford.edu/2023/03/13/alpaca.html
 
 Implementation reference: https://github.com/tloen/alpaca-lora
 
-## File Structure
 
-```
-```
 
 * `chatbot.py` runs our finalized model with web UI 
-* ``
+* `alpaca_hotpot_qa.py` contain class definition of an alpaca & classical model fusion pipeline
+* `alpaca-hotpot-qa-example-usages.ipynb` show usage example of using alpaca-hotpot
 
-
+* `webscraping/` directory contains web-scraping code for crawling phonedb.net and techradar.com
+* `model-weights/` stores our finetuned alpaca-lora for cellphone sales relevant Q&A tasks
+* `bert/` [check this README](https://github.com/zht043/cell-sales-chatbot/blob/main/bert/README.md) 
+* `bert2/` [check this README](https://github.com/zht043/cell-sales-chatbot/blob/main/bert2/readme.md)
+* `small models` [check this README](https://github.com/zht043/cell-sales-chatbot/blob/main/small%20models/README.md)
 
 
 
