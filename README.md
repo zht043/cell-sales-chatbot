@@ -1,7 +1,10 @@
 # Alpaca LLM based Cellphone Sales Chatbot
+
 ![](https://img.shields.io/badge/Linux%20build-pass-green.svg?logo=linux) 
 
 ![](https://img.shields.io/badge/NVIDIA-CUDA-green.svg?logo=nvidia) 
+
+<img src="README.assets/image-20230510204636108-3722799.png" alt="image-20230510204636108" style="zoom:50%;" />
 
 Domain-specific AI chatbot built with a combinations of Alpaca-lora and other classical NLP models such as BERT for cellphone sales relevant Q&amp;A.
 
@@ -22,8 +25,6 @@ Source Files:
 * `bert/` [check this README](https://github.com/zht043/cell-sales-chatbot/blob/main/bert/README.md) 
 * `bert2/` [check this README](https://github.com/zht043/cell-sales-chatbot/blob/main/bert2/readme.md)
 * `small models` [check this README](https://github.com/zht043/cell-sales-chatbot/blob/main/small%20models/README.md)
-
-
 
 ## Install Dependencies
 
@@ -127,7 +128,7 @@ Answer:
 
 
 
-Alpaca-Hotpot is wrapped as a class defined in [alpaca_hotpot_qa.py](https://github.com/zht043/cell-sales-chatbot/blob/main/alpaca_hotpot_qa.py), example usage can be found in this [alpaca-hotpot-qa-example-usages.ipynb](https://github.com/zht043/cell-sales-chatbot/blob/main/alpaca-hotpot-qa-example-usages.ipynb).
+Alpaca-Hotpot pipeline is defined as a class in [alpaca_hotpot_qa.py](https://github.com/zht043/cell-sales-chatbot/blob/main/alpaca_hotpot_qa.py), example usage can be found in this [alpaca-hotpot-qa-example-usages.ipynb](https://github.com/zht043/cell-sales-chatbot/blob/main/alpaca-hotpot-qa-example-usages.ipynb).
 
 Example:
 
