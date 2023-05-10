@@ -359,7 +359,7 @@ class AlpacaHotPotQA:
             narrowed_labels = topk_lables(fuzzy_scores(token, model_name_list), k = 5) 
 
             cls_result = self.bart_classifier(token, narrowed_labels, multiclass=True)
-            pred = cls_result["labels"][0]
+            pred = cls_result["labels"][0] #get the label with the highest cls score
             results.add(pred)
 
             if print_process:
