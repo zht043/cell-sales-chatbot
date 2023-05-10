@@ -57,11 +57,11 @@ Combining Alpaca-Lora LLM with other classical NLP models for QA task: Alpaca-Ho
 
 ### Walk-through of Alpaca-Hotpot pipelines
 
-Question: **How do the camera capabilities of the Apple iPhone 12,Samsung Galaxy S21, and Xiaomi Mi 11 compare?**
+Question: **What is the maximum refresh rate of the iPhone 12 Pro Max display and how does it compare to the Samsung Galaxy Note20 Ultra?**
 
 Answer with **step-by-step** print outs: 
 
-```
+```shell
 ------------------------------------------------
 Step 1: Alpaca extract name tokens
 
@@ -69,47 +69,39 @@ Step 1: Alpaca extract name tokens
  Ignore the input. Extract all phone model names from the input sentence. Append and prepend '%%%' symbols to each phone model name.
 
 >>>>> Input:
- How do the camera capabilities of the Apple iPhone 12,Samsung Galaxy S21, and Xiaomi Mi 11 compare?
+ What is the maximum refresh rate of the iPhone 12 Pro Max display and how does it compare to the Samsung Galaxy Note20 Ultra?
 
 Generating ......
 
 <<<<< Output:
- %%Apple iPhone 12%%,%%Samsung Galaxy S21%%,%%Xiaomi Mi 11%%
+ %%iPhone 12 Pro Max%% %%Samsung Galaxy Note20 Ultra%%
 
 ------------------------------------------------
 Using regex to tokenize:
-['Xiaomi Mi 11', 'Samsung Galaxy S21', 'Apple iPhone 12']
+['iPhone 12 Pro Max', 'Samsung Galaxy Note20 Ultra']
 ------------------------------------------------
 
 Step 2: Zero-shot BART classifier extract name keys
 
-Extracted Model Name:  Xiaomi Mi 11
-Extracted Model Name:  Samsung Galaxy S21
-Extracted Model Name:  iPhone 12
+Extracted Model Name:  iPhone 12 Pro Max
+Extracted Model Name:  Samsung Galaxy Note 20 Ultra
 ------------------------------------------------
 
 
 
 ------------------------------------------------
 Querying local DataBase ......
-Model Name Family:  iPhone 12
-100%|██████████| 158/158 [00:01<00:00, 87.91it/s]
-100%|██████████| 159/159 [00:01<00:00, 96.47it/s]
-100%|██████████| 158/158 [00:01<00:00, 96.31it/s]
-Model Name Family:  Xiaomi Mi 11
-100%|██████████| 145/145 [00:01<00:00, 91.49it/s]
-100%|██████████| 145/145 [00:01<00:00, 93.96it/s]
-100%|██████████| 150/150 [00:01<00:00, 94.48it/s]
-Model Name Family:  Samsung Galaxy S21
-100%|██████████| 166/166 [00:01<00:00, 89.09it/s]
-100%|██████████| 166/166 [00:01<00:00, 94.32it/s]
-100%|██████████| 173/173 [00:01<00:00, 94.69it/s]
+Model Name Family:  iPhone 12 Pro Max
+100%|██████████| 162/162 [00:01<00:00, 90.45it/s]
+100%|██████████| 162/162 [00:01<00:00, 94.63it/s]
+100%|██████████| 162/162 [00:01<00:00, 95.04it/s]
+Model Name Family:  Samsung Galaxy Note 20 Ultra
+100%|██████████| 167/167 [00:01<00:00, 89.10it/s]
+100%|██████████| 167/167 [00:01<00:00, 94.14it/s]
 ------------------------------------------------
-The iPhone 12 Mini 5G A2400 Dual SIM TD-LTE CN 128GB / A2401 is the most affordable variant of the iPhone 12 Mini for mainland China, Hong Kong and Macao. It features a Super Retina XDR AMOLED display protected by Ceramic Shield, 12 + 12 MP wide-angle rear cameras and 12 MP TrueDepth front camera. It also has HDR photo, Slow motion video, Burst mode, Touch focus, Panorama Photo, Face detection, Face tagging, Smile detection and 12.2 MP camera. The iPhone 12 Mini 5G A2400 Dual SIM TD-LTE CN 64GB / A2401 is the most affordable variant of the iPhone 12 Mini for mainland China, Hong Kong and Macao. It features a Super Retina XDR AMOLED display protected by Ceramic Shield, 12 + 12 MP wide-angle rear cameras and 12 MP TrueDepth front camera
+The iPhone 12 Pro Max 5G A2412 Dual SIM TD-LTE CN 512GB / A2413 has a 60Hz display refresh rate, a 120Hz touchscreen sampling rate, and a 60Hz display refresh rate. The iPhone 12 Pro Max 5G A2412 Dual SIM TD-LTE CN 256GB / A2413 has a 60Hz display refresh rate, a 120Hz touchscreen sampling rate, and a 60Hz display refresh rate. The iPhone 12 Pro Max 5G A2412 Dual SIM TD-LTE CN 128GB / A2413 has a 60Hz display refresh rate, a 120Hz touchscreen sampling rate, and a 60Hz display refresh rate.
 
-Xiaomi Mi 11 Youth 5G Premium Edition Dual SIM TD-LTE CN 256GB M2101K9C is a Chinese variant of Mi11 Lite 5G smartphone with 256 GB UFS 2.2 ROM, 8 GiB LP-DDR4X RAM. Xiaomi Mi 11 Youth 5G Premium Edition Dual SIM TD-LTE CN 128GB M2101K9C is a Chinese variant of Mi11 Lite 5G smartphone with 128 GB UFS 2.2 ROM, 8 GiB LP-DDR4X RAM. Xiaomi Mi 11 Pro 5G Premium Edition Dual SIM TD-LTE CN 256GB M2102K1AC is a Chinese variant of Mi11 Pro 5G smartphone with 256 GB UFS 2.2 ROM, 8 GiB LP-DDR4X RAM.
-
-The Samsung SM-G9960 Galaxy S21+ 5G Dual SIM TD-LTE CN HK 256GB is a powerful cellphone with a 12.2 MP camera, Samsung ISOCELL Plus S5K2LD camera module, and an adaptive display with support for 10 Hz to 120 Hz at Quad HD+ quality. It also has dual nano-SIM slots and 128 GB of storage. The Samsung SM-G9960 Galaxy S21+ 5G Dual SIM TD-LTE CN HK 128GB is a powerful cellphone with a 12.2 MP camera, Samsung ISOCELL Plus S5K2LD camera module, and an adaptive display with support for 10 Hz to 120 Hz at Quad HD+ quality. It also has dual nano-SIM slots and 128 GB of storage. The Samsung SM-G9980 Galaxy S21 Ultra 5G Dual SIM TD-LTE C
+The Samsung SM-N9860 Galaxy Note 20 Ultra 5G Dual SIM TD-LTE CN 512GB and the Samsung SM-N9860 Galaxy Note 20 Ultra 5G Dual SIM TD-LTE CN 256GB are two variants of the same phone, the Galaxy Note 20 Ultra 5G. Both variants have a 6.7-inch Super AMOLED display with a 120Hz refresh rate, a Snapdragon 865 chipset, and 512GB or 256GB of storage. The SM-N9860 Galaxy Note 20 Ultra 5G Dual SIM TD-LTE CN 512GB has a 512GB of storage, while the SM-N9860 Galaxy Note 20 Ultra 5G Dual SIM TD-LTE CN 256GB has a 256GB of storage. Both variants have a triple camera setup on the back, with a 48
 
 
 ------------------------------------------------
@@ -117,11 +109,11 @@ The Samsung SM-G9960 Galaxy S21+ 5G Dual SIM TD-LTE CN HK 256GB is a powerful ce
 Back to the original question >>>>>> 
 ------------------------------------------------
 Question:
-  How do the camera capabilities of the Apple iPhone 12,Samsung Galaxy S21, and Xiaomi Mi 11 compare?
+  What is the maximum refresh rate of the iPhone 12 Pro Max display and how does it compare to the Samsung Galaxy Note20 Ultra?
 
 
 Answer:
- The camera capabilities of the Apple iPhone 12, Samsung Galaxy S21, and Xiaomi Mi 11 are similar. The iPhone 12 has a 12 MP wide-angle rear camera and a 12 MP TrueDepth front camera. The Galaxy S21 has a 12 MP wide-angle rear camera and a 12 MP TrueDepth front camera. The Mi 11 has a 12 MP wide-angle rear camera and a 12 MP TrueDepth front camera.
+ The iPhone 12 Pro Max display has a maximum refresh rate of 60Hz. The Samsung Galaxy Note20 Ultra display has a maximum refresh rate of 120Hz.
 ```
 
 
