@@ -9,7 +9,7 @@ Stanford Alpaca LLM(Large Language Model):https://crfm.stanford.edu/2023/03/13/a
 
 Alpaca-Lora model reference: https://github.com/tloen/alpaca-lora
 
-Check [our presentation slides](./ARIN7102\ presentation.pptx.pdf) for more details
+Check [our presentation slides](https://github.com/zht043/cell-sales-chatbot/blob/main/ARIN7102%20presentation.pptx.pdf) for more details
 
 Source Files:
 
