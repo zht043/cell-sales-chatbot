@@ -20,7 +20,8 @@ from sentence_transformers import SentenceTransformer, util
 
 
 
-
+### fast word-sentence similarity ###
+# computer scores for fuzzy matching of word-sentence similarity
 def fuzzy_score(sentence, word):
     return fuzz.partial_ratio(word.lower(), sentence.lower())
 
@@ -30,6 +31,8 @@ def fuzzy_scores(sentence, word_list):
         score = fuzz.partial_ratio(word.lower(), sentence.lower())
         result.append([word, score])
     return result    
+
+# find top k words(i.e labels or names) yielding the highest fuzzy matching scores
 def topk_lables(fuzzy_score_list, k = 5):
     fs_sort = sorted(fuzzy_score_list, key=lambda x: x[1], reverse=True)
     lbs = []
@@ -40,48 +43,50 @@ def topk_lables(fuzzy_score_list, k = 5):
         for i in range(len(fs_sort)):
              lbs.append(fs_sort[i][0])
     return lbs
+###-------------------------------### 
+
+
+
+
+
+# def string_line_filter(string, filter_keywords, filter_out=True):
+#     lines = string.splitlines()
+#     filtered_lines = []
+#     for line in lines:
+#         append = True if filter_out else False
+#         for keyword in filter_keywords:
+#             if keyword in line:
+#                 append = False if filter_out else True
+#         if append:
+#             filtered_lines.append(line)
+#     new_string = "\n".join(filtered_lines)
     
+#     return new_string
 
+# def extract_table_keys(text):
+#     lines = text.splitlines()
+#     keys = []
+#     for line in lines:
+#         key = line.split(":", maxsplit=1)[0]        
+#         keys.append(key.strip())
+#     return keys
 
+# def table_findall(text, keyword):
+#     pattern = r'.*\b(' + "Camera" + r')\b.*'
+#     matches = [line.strip() for line in text.split('\n') if re.match(pattern, line)]
+#     return matches
 
-def string_line_filter(string, filter_keywords, filter_out=True):
-    lines = string.splitlines()
-    filtered_lines = []
-    for line in lines:
-        append = True if filter_out else False
-        for keyword in filter_keywords:
-            if keyword in line:
-                append = False if filter_out else True
-        if append:
-            filtered_lines.append(line)
-    new_string = "\n".join(filtered_lines)
-    
-    return new_string
-
-def extract_table_keys(text):
-    lines = text.splitlines()
-    keys = []
-    for line in lines:
-        key = line.split(":", maxsplit=1)[0]        
-        keys.append(key.strip())
-    return keys
-
-def table_findall(text, keyword):
-    pattern = r'.*\b(' + "Camera" + r')\b.*'
-    matches = [line.strip() for line in text.split('\n') if re.match(pattern, line)]
-    return matches
-
-
+### sentence-sentence similarity ###
 def sentence_similarity(sentsim_model, text1, text2):
     embedding_1= sentsim_model.encode(text1, convert_to_tensor=True)
     embedding_2 = sentsim_model.encode(text2, convert_to_tensor=True)
     return util.pytorch_cos_sim(embedding_1, embedding_2)
-
+###-------------------------------###
 
 
     
     
-
+### Alpaca-HotPot (a.k.a Alpaca Fusion) model class
 class AlpacaHotPotQA:
     def __init__(self, device, alpaca_model, tokenizer, phonedb_data, name_map):
         self.device = device
@@ -94,13 +99,19 @@ class AlpacaHotPotQA:
         self.name_map = name_map
         self.name_list = list(name_map.keys())
         
-
+        # load BART model for zero-shot-classification
         self.bart_classifier = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
+
+        # load sentence transformer model to get sentence embeddings and compute sentence-sentence similarity
+        #  with a relatively fast inference speed compared to Alpaca itself
         self.sentsim_transformer = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
 
 
-
+    ### Perform phone related QA task using a fusion of the Alpaca LLM model and smaller classical NLP models
     def inference(self, question, print_process=True, yield_process = False):
+        # check "name_query_mix_models_inference" function's definition written below for detailed documentation
+        # this function returns all phone model name tokens found in the question sentence, it works even if
+        # the sentence contain multiple phone names or the phone names is in a non-standard format
         key_names = self.name_query_mix_models_inference(question, self.name_list, print_process)
 
         if print_process:
@@ -113,6 +124,7 @@ class AlpacaHotPotQA:
 
         context_text = ""
         for n in key_names:
+            # query the local phonedb text database
             keys_texts = self.query_key_text_list(n)
             relevant_texts = []
 
@@ -128,6 +140,8 @@ class AlpacaHotPotQA:
             for key, text in keys_texts:
                 keys_list.append(key)
                 texts_list.append(text)
+
+            # use BART to do zero-shot multiple-choice classification, check the function def for details
             cls_res = self.efficient_bart_cls_inference(question, keys_list)
             keys_texts_ranked = []
             ranked_keys = cls_res["labels"][0 : topk]
@@ -138,6 +152,7 @@ class AlpacaHotPotQA:
 
             for ln, text in keys_texts_ranked:
                 relevant_text = "Model full name is '" + ln + "':\n"
+                # use sentence-to-sentence cosine similarity scores to find relevant texts
                 relevant_text += self.relevant_table_text(question, text, topk=3)
                 relevant_text += "\n"
                 #print(relevant_text)
@@ -153,7 +168,7 @@ class AlpacaHotPotQA:
             print("\n------------------------------------------------")
             print("Step 4: Summarizing the text fetched using Alpaca base model")
             
-            # invoke Alpaca to summarize
+            # invoke Alpaca to summarize the long text
             instruction = '''Summarize the input passage which contains info about\
         different specific models of a cellphone family, don't omit model names
         '''
@@ -210,7 +225,12 @@ class AlpacaHotPotQA:
 
 
     
-
+    ### Call the Alpaca LLM model to perform inference, the inputs
+    ### are primarily just an input text string and an instruction string,
+    ### the instruction string will be wrapped by a internal prompter to
+    ### couple with the input text to better instruct this LLM model
+    ### for what to do with the input text, which is prompt-engineering for LLM
+    ### ps: keep max_new_tokens value small if running on a GPU without a large GPU RAM   
     def alpaca_inference(self, input_text, instructions, 
         temperature = 0.3, top_p = 0.75, top_k = 40, num_beams = 1, 
         max_new_tokens = 666, **kwargs):
@@ -234,11 +254,16 @@ class AlpacaHotPotQA:
         return self.prompter.get_response(output)
     
     
+    ### Use BART-based model to perform zero-shot multiple-choice classification,
+    ### the input long_label_list are the choices label for the classification but
+    ### exceeding the max allowed number of candidate labels, hence the topk_labels
+    ### function filters the labels list by their fuzzy word-to-sentence scores  
     def efficient_bart_cls_inference(self, text, long_label_list):
         narrowed_labels = topk_lables(fuzzy_scores(text, long_label_list)) #narrowed down to short name list
         result = self.bart_classifier(text, narrowed_labels, multiclass=True)
         return result
     
+    ### Helper function for querying local phonedb text database
     def query_specs_list(self, short_name, debug=False, replace_new_line = True):
         spec_list = []
         for ln in self.name_map[short_name]:
@@ -251,6 +276,10 @@ class AlpacaHotPotQA:
             spec_list.append(spec)
         return spec_list
 
+    ### Same as above func but return a key-value pair instead,
+    ### here the key is a short phone name such as "iPhone 13", the value
+    ### is a list of all relevant text containing specs info for all relevant
+    ### models such as "iPhone 13 mini, iPhone 13 Pro, iPhone 13 128GB, iPhone 13 256GB etc."
     def query_key_text_list(self, short_name, debug=False, replace_new_line = True):
         key_text = []
         for ln in self.name_map[short_name]:
@@ -263,6 +292,32 @@ class AlpacaHotPotQA:
             key_text.append([ln, spec])
         return key_text
     
+
+    ### This function use Alpaca model to extract all phone model names appeared in a question, which
+    ### are natural names that could take many different formats, such as iphone 13 pro, iPhone 13 pro 256G, 
+    ### the pro version of iphone 13, Apple iphone 13 etc. which are all corresponding to the same name key 
+    ### for querying local database. But in order to properly query local database, the output of Alpaca extraction 
+    ### of the model name tokens must match exactly to the keys in the local name key list, which is difficult 
+    ### for the alpaca model to complete everything as an end-to-end task due to a couple reasons: 
+    ###     1. alpaca doesn't always generate consistent results with fixed format, 
+    ###     2. the candidate key list is too long to be used to feed into the alpaca instruction prompt which 
+    ###        has some limit on the the number of input tokens. 
+    ###     3. One alpaca inference is time-consuming, which makes it very slow for alpaca inference to be
+    ###        performed on each divided sub-tasks after dividing the long key list into shorter sublists
+    ### As a result, we tried mixing alpaca and other smaller-and-less capable but faster NLP models. Specifically,
+    ### the mix-models inference pipeline first use alpaca to extract arbitary number of model names appeared
+    ### in the question sentence, and then select top 5 candidate name keys filtered from the local key list by
+    ### ranking their the word-to-sentence fuzzy-matching similarity scores between candidate names and the question
+    ### sentence. (experiments indicated fuzzy word-sentence scores are better than sentence-sentence embedding cos-similarity scores)   
+    ### With the 5 candidate names, the task could be converted to an NLP multiple choice classification task,
+    ### the zero-shot classification BART model is utilized to match every tokens extracted by earlier steps to
+    ### the candidata names, and then the function returns those matched candidated names for accessing relevant
+    ### text data in the local database
+    ### 
+    ### ps: BERT-based models performed poorly in zero-shot extracting multiple names appeared in a sentence,
+    ### although fintuning them on a token-classification dataset on these phone model names should make 
+    ### the BERT-based models to work properly, creating such dataset is time consuming and also defeating
+    ### the generalization ability of the whole pipeline to extend to more general use case.
     def name_query_mix_models_inference(self, sentence, model_name_list, print_process = False):
         ### Step 1: Alpaca extract name tokens
         instruction = "Ignore the input. Extract all phone model names from the input sentence. \
@@ -317,7 +372,8 @@ class AlpacaHotPotQA:
         return results
     
 
-
+    ### Use the classical word-embedding cosine similarity scores to find top K relevant context texts 
+    ### within a text list
     def relevant_table_text(self, question, text, topk = 3):
         lines = text.splitlines()
         relevant_text = ""
