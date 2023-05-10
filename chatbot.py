@@ -29,7 +29,7 @@ with gr.Blocks(title="Chatbot") as demo:    # Gradio Web Interface
         history[-1][1] = ""
 
         ##  Part 1: Begin of the prompt
-        prompt = "Below is an instruction that describes a task, paired with an input that provides further context. Write a response that appropriately completes the request.\n\n### Instruction:\nAs an AI model, you are reqired to generate response according to the chat history."
+        prompt = "Below is an instruction that describes a task, paired with an input that provides further context. Write a response that appropriately completes the request.\n\n### Instruction:\nAs an AI model, you are required to generate response according to the chat history."
         
         ##  Part 2: Call BERT to get related information
         bert_qa_result = bert_qa_api(history[-1][0],from_api = True)
