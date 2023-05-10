@@ -1,0 +1,9 @@
+matplotlib==3.2.2
+numpy==1.24.3
+pandas==2.0.0
+pytorch==2.0.0
+torchvision==0.15.0
+torchaudio==2.0.0
+pytorch-cuda==11.7
+tensorboard==2.6.0
+tqdm==4.65.0
