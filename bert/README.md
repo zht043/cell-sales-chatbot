@@ -62,18 +62,17 @@ in which:
   
 
 ## II. Installation <a id="installation"></a>
-
+Trained Model [Download link](https://connecthkuhk-my.sharepoint.com/:u:/g/personal/huangym2_connect_hku_hk/EYmpO2yt_VdEsqVN5lVBhgcB3r0jPWiU7U-Lkn-GdVFESA?e=FOQ5wT) (Put the model into output/)
 ```
 matplotlib==3.2.2
-numpy==1.19.2
-Pillow==8.2.0
-pytorch-gpu==1.10.2
-torchvision==0.4.2
+numpy==1.24.3
+pandas==2.0.0
+pytorch==2.0.0
+torchvision==0.15.0
+torchaudio==2.0.0
+pytorch-cuda==11.7
 tensorboard==2.6.0
-future==0.18.2
-tqdm==4.59.0
-scikit-image==0.17.2
-torchio==0.18.76
+tqdm==4.65.0
 ```
 
 To install for Ubuntu,
