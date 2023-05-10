@@ -1,13 +1,27 @@
-# cell-sales-chatbot
-Domain-specific AI chatbot built with a combinations of Alpaca-lora and other small NLP models for cellphone sales relevant Q&amp;A
+# Alpaca LLM based Cellphone Sales Chatbot
+Domain-specific AI chatbot built with a combinations of Alpaca-lora and other classical NLP models such as BERT for cellphone sales relevant Q&amp;A.
+
+Stanford Alpaca model:
+
+Implementation reference: https://github.com/tloen/alpaca-lora
+
+
+
+Install Dependencies:
 
 ```
 pip install -r requirements.txt
 ```
 
+
+
 ## Chatbot Web Interface
 
-We utilize Gradio to construct a web interface. Simply execute with `python chatbot.py`.
+We utilize Gradio to construct a web interface. Simply execute:
+
+```shell
+python chatbot.py
+```
 
 Optional parameters:
 
@@ -18,4 +32,6 @@ Optional parameters:
 
 ![Web Interface](./img/web1.png)
 
+## Alpaca-Hotpot Pipeline
 
+Combining Alpaca-Lora 
